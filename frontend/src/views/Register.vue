@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter, RouterLink } from 'vue-router'
+import { useRoute, useRouter, RouterLink } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { User, Mail, Phone, Lock, ArrowRight } from 'lucide-vue-next'
 
 const auth = useAuthStore()
 const router = useRouter()
+const route = useRoute()
 const form = ref({ name: '', email: '', phone: '', password: '', password_confirmation: '' })
 const error = ref<string | null>(null)
 
@@ -13,7 +14,9 @@ async function submit() {
   error.value = null
   try {
     await auth.register(form.value)
-    router.push('/')
+    const redirect = (route.query.redirect as string) || '/'
+    const service = route.query.service
+    router.push(service ? { path: redirect, query: { service } } : redirect)
   } catch (e: any) {
     const errs = e?.response?.data?.errors
     error.value = errs ? Object.values(errs).flat().join(' ') : (e?.response?.data?.message || 'Error al registrar')

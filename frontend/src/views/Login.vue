@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRoute, useRouter, RouterLink } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { Mail, Lock, ArrowRight, UserPlus } from 'lucide-vue-next'
@@ -16,12 +16,20 @@ async function submit() {
   error.value = null
   try {
     await auth.login(email.value, password.value)
-    const to = (route.query.redirect as string) || '/'
-    router.push(to)
+    const redirect = (route.query.redirect as string) || '/'
+    const service = route.query.service
+    router.push(service ? { path: redirect, query: { service } } : redirect)
   } catch (e: any) {
     error.value = e?.response?.data?.message || 'No se pudo iniciar sesión'
   }
 }
+
+const registerLink = computed(() => {
+  const q: Record<string, any> = {}
+  if (route.query.redirect) q.redirect = route.query.redirect
+  if (route.query.service) q.service = route.query.service
+  return Object.keys(q).length ? { path: '/register', query: q } : '/register'
+})
 </script>
 
 <template>
@@ -77,7 +85,7 @@ async function submit() {
 
       <p class="text-center t-muted text-sm">
         ¿Nuevo cliente?
-        <RouterLink to="/register" class="btn-link ml-1">
+        <RouterLink :to="registerLink" class="btn-link ml-1">
           Regístrate <UserPlus class="w-3.5 h-3.5" />
         </RouterLink>
       </p>

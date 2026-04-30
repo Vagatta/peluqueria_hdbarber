@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useServicesStore } from '@/stores/services'
 import { useAppointmentsStore } from '@/stores/appointments'
 import ServiceCard from '@/components/ServiceCard.vue'
@@ -12,6 +12,7 @@ import { generateGoogleCalendarLink } from '@/utils/calendar'
 const services = useServicesStore()
 const appts = useAppointmentsStore()
 const router = useRouter()
+const route = useRoute()
 
 const selectedService = ref<Service | null>(null)
 const date = ref<string>(new Date().toISOString().slice(0, 10))
@@ -24,7 +25,14 @@ const error = ref<string | null>(null)
 const showCalendarModal = ref(false)
 const lastAppointment = ref<any>(null)
 
-onMounted(() => services.fetch())
+onMounted(async () => {
+  await services.fetch()
+  const sid = route.query.service
+  if (sid) {
+    const found = services.items.find(s => s.id === Number(sid))
+    if (found) selectedService.value = found
+  }
+})
 
 async function loadSlots() {
   if (!selectedService.value) return

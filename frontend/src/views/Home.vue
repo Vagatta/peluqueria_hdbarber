@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import { useServicesStore } from '@/stores/services'
 import { useAuthStore } from '@/stores/auth'
 import { useAppointmentsStore } from '@/stores/appointments'
@@ -10,6 +10,15 @@ import { Scissors, Calendar, ShieldCheck, CalendarCheck, Award, ArrowRight, Cloc
 const services = useServicesStore()
 const auth = useAuthStore()
 const appts = useAppointmentsStore()
+const router = useRouter()
+
+function selectService(id: number) {
+  if (auth.isAuthenticated) {
+    router.push({ path: '/book', query: { service: id } })
+  } else {
+    router.push({ path: '/login', query: { redirect: '/book', service: id } })
+  }
+}
 
 onMounted(() => {
   services.fetch()
@@ -94,7 +103,7 @@ function eur(c: number) { return (c / 100).toLocaleString('es-ES', { style: 'cur
       </div>
       <div v-else-if="services.items.length === 0" class="t-muted">No hay servicios disponibles.</div>
       <div v-else class="grid sm:grid-cols-2 lg:grid-cols-3 gap-gutter">
-        <ServiceCard v-for="s in services.items" :key="s.id" :service="s" />
+        <ServiceCard v-for="s in services.items" :key="s.id" :service="s" @select="selectService(s.id)" />
       </div>
     </section>
   </div>
