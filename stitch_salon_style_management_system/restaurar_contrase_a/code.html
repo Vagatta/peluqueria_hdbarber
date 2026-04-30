@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Restaurar Contraseña - Urban Grooming</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#93000a",
+                        "tertiary-fixed": "#e2e2e2",
+                        "surface-container-highest": "#343535",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "on-primary": "#313030",
+                        "on-tertiary-container": "#7c7d7d",
+                        "surface": "#121414",
+                        "surface-tint": "#c8c6c5",
+                        "tertiary-container": "#101212",
+                        "tertiary": "#c6c6c6",
+                        "outline-variant": "#444748",
+                        "on-secondary-fixed-variant": "#474747",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "on-background": "#e3e2e2",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "inverse-on-surface": "#303031",
+                        "on-surface-variant": "#c4c7c7",
+                        "inverse-surface": "#e3e2e2",
+                        "primary-fixed": "#e5e2e1",
+                        "on-surface": "#e3e2e2",
+                        "on-primary-container": "#7e7d7d",
+                        "on-primary-fixed": "#1c1b1b",
+                        "on-error-container": "#ffdad6",
+                        "primary-container": "#121212",
+                        "surface-container-high": "#292a2a",
+                        "secondary": "#c8c6c5",
+                        "surface-container-lowest": "#0d0e0f",
+                        "on-tertiary": "#2f3131",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "background": "#121414",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "secondary-container": "#474747",
+                        "secondary-fixed": "#e4e2e1",
+                        "on-secondary": "#303030",
+                        "outline": "#8e9192",
+                        "surface-variant": "#343535",
+                        "surface-dim": "#121414",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "on-primary-fixed-variant": "#474646",
+                        "surface-bright": "#383939",
+                        "on-secondary-container": "#b6b5b4",
+                        "surface-container-low": "#1b1c1c",
+                        "surface-container": "#1f2020",
+                        "primary": "#c8c6c5",
+                        "on-error": "#690005",
+                        "inverse-primary": "#5f5e5e",
+                        "error": "#ffb4ab"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sm": "12px",
+                        "margin": "32px",
+                        "gutter": "24px",
+                        "xs": "4px",
+                        "lg": "48px",
+                        "xl": "80px",
+                        "md": "24px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Space Grotesk"],
+                        "headline-sm": ["Space Grotesk"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Space Grotesk"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-sm": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-md": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: theme('colors.background'); color: theme('colors.on-background'); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="min-h-screen flex flex-col items-center justify-start overflow-x-hidden antialiased selection:bg-primary selection:text-on-primary">
+<!-- TopAppBar (Transactional - Hidden Nav, Anchor Styling) -->
+<header class="w-full bg-[#121212] border-b border-[#2C2C2C] flex items-center justify-between px-6 py-4 sticky top-0 z-50">
+<button aria-label="Volver" class="text-zinc-400 hover:text-zinc-100 transition-colors duration-200 flex items-center justify-center p-2 rounded-DEFAULT active:opacity-70 transition-opacity focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<span class="font-['Space_Grotesk'] text-xl font-black text-zinc-100 tracking-widest uppercase">URBAN GROOMING</span>
+<div class="w-[40px] h-[40px]"></div> <!-- Spacer for alignment -->
+</header>
+<!-- Main Content Canvas -->
+<main class="w-full max-w-md mx-auto px-margin py-xl flex-grow flex flex-col justify-center">
+<div class="mb-lg text-center">
+<h1 class="font-headline-md text-headline-md text-on-surface mb-sm">RESTAURAR CONTRASEÑA</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                Introduce la dirección de correo electrónico asociada a tu cuenta y te enviaremos un enlace para restablecer tu contraseña.
+            </p>
+</div>
+<form class="space-y-md flex flex-col">
+<!-- Input Field Group -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-on-surface uppercase" for="email">CORREO ELECTRÓNICO</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-0 border-b border-[#2C2C2C] focus:border-primary text-on-surface font-body-md text-body-md px-4 py-3 placeholder:text-outline-variant focus:ring-0 transition-colors rounded-t-DEFAULT" id="email" name="email" placeholder="tu@email.com" required="" type="email"/>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-outline-variant" data-icon="mail">mail</span>
+</div>
+</div>
+<!-- Spacer -->
+<div class="h-sm"></div>
+<!-- Primary Button -->
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md uppercase py-4 px-6 rounded-DEFAULT flex items-center justify-center gap-2 hover:bg-surface-tint transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background group" type="submit">
+                ENVIAR ENLACE DE RECUPERACIÓN
+                <span class="material-symbols-outlined transition-transform group-hover:translate-x-1" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</form>
+<!-- Secondary Action -->
+<div class="mt-lg text-center">
+<a class="font-label-md text-label-md text-tertiary hover:text-primary transition-colors border-b border-transparent hover:border-primary pb-1" href="#">VOLVER AL INICIO DE SESIÓN</a>
+</div>
+</main>
+<!-- Footer (Transactional Pages can have a simplified footer or omitted. Keeping it simple as requested) -->
+<footer class="w-full py-8 px-12 flex flex-col items-center gap-4 mt-auto border-t border-[#2C2C2C] bg-[#121212]">
+<div class="font-['Space_Grotesk'] text-[10px] uppercase tracking-widest text-zinc-500">
+            © 2024 URBAN GROOMING. PRECISION &amp; TRADITION.
+        </div>
+</footer>
+</body></html>

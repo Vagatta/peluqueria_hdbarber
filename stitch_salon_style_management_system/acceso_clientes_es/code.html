@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Iniciar Sesión - Urban Grooming</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary": "#303030",
+                      "secondary-fixed": "#e4e2e1",
+                      "secondary-container": "#474747",
+                      "tertiary-fixed-dim": "#c6c6c6",
+                      "background": "#121414",
+                      "on-secondary-fixed": "#1b1c1c",
+                      "on-tertiary": "#2f3131",
+                      "surface-container-lowest": "#0d0e0f",
+                      "secondary": "#c8c6c5",
+                      "surface-container-high": "#292a2a",
+                      "error": "#ffb4ab",
+                      "on-error": "#690005",
+                      "primary": "#c8c6c5",
+                      "inverse-primary": "#5f5e5e",
+                      "surface-container-low": "#1b1c1c",
+                      "surface-container": "#1f2020",
+                      "surface-bright": "#383939",
+                      "on-secondary-container": "#b6b5b4",
+                      "on-primary-fixed-variant": "#474646",
+                      "primary-fixed-dim": "#c8c6c5",
+                      "surface-dim": "#121414",
+                      "surface-variant": "#343535",
+                      "outline": "#8e9192",
+                      "on-tertiary-fixed-variant": "#454747",
+                      "on-background": "#e3e2e2",
+                      "on-secondary-fixed-variant": "#474747",
+                      "outline-variant": "#444748",
+                      "tertiary": "#c6c6c6",
+                      "tertiary-container": "#101212",
+                      "surface-tint": "#c8c6c5",
+                      "surface": "#121414",
+                      "on-tertiary-container": "#7c7d7d",
+                      "on-primary": "#313030",
+                      "on-tertiary-fixed": "#1a1c1c",
+                      "surface-container-highest": "#343535",
+                      "tertiary-fixed": "#e2e2e2",
+                      "error-container": "#93000a",
+                      "primary-container": "#121212",
+                      "on-error-container": "#ffdad6",
+                      "on-primary-fixed": "#1c1b1b",
+                      "on-primary-container": "#7e7d7d",
+                      "on-surface": "#e3e2e2",
+                      "primary-fixed": "#e5e2e1",
+                      "inverse-surface": "#e3e2e2",
+                      "on-surface-variant": "#c4c7c7",
+                      "inverse-on-surface": "#303031",
+                      "secondary-fixed-dim": "#c8c6c5"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "sm": "12px",
+                      "margin": "32px",
+                      "gutter": "24px",
+                      "xs": "4px",
+                      "lg": "48px",
+                      "md": "24px",
+                      "base": "8px",
+                      "xl": "80px"
+              },
+              "fontFamily": {
+                      "headline-lg": [
+                              "Space Grotesk"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Space Grotesk"
+                      ],
+                      "headline-sm": [
+                              "Space Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-sm": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background min-h-screen w-full flex items-center justify-center p-gutter relative overflow-hidden">
+<!-- TopAppBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#121212] text-slate-300 font-['Space_Grotesk'] tracking-tight uppercase border-b border-[#2C2C2C] flex justify-between items-center px-6 h-16 max-w-none">
+<button class="hover:bg-[#1C1C1C] transition-colors active:opacity-80 flex items-center justify-center p-2 rounded-full">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<span class="text-xl font-bold text-slate-200 tracking-widest">Urban Grooming</span>
+<div class="hover:bg-[#1C1C1C] transition-colors active:opacity-80 rounded-full overflow-hidden w-8 h-8 flex items-center justify-center cursor-pointer">
+<img alt="Logo de Urban Grooming" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/ADBb0uj1gbtd99hA2ddzNOlgchS0-8vjVSYNKe6aFeGuYkzL0kvwUP0onifhE8RBviXvIYedSpHyUtB93ffYag39kJahSU3aycfNERJSP_YWqtW2TpFDQVdNwyJ9ScOQd31dF1CjwIVjFhJ7SFZsBE8Vq-UET2L2Nj3_HzNv5jjO6jkoOeaoLc6Vz5lVcxv_HqLIDyheOBi4mUizC4Kt2esy8Mgc4lqo3Lcp_kxuWZDv472Y5Mq7IHMq6GGfHV9Fj4YhN2yEjKpKkZWong"/>
+</div>
+</nav>
+<!-- Dimmed Background Image -->
+<div class="absolute inset-0 z-0 mt-16">
+<img alt="Shop Background" class="w-full h-full object-cover opacity-10" data-alt="High-end modern industrial barber shop interior, dark leather chairs, exposed brick, warm ambient lighting, sharp focus, cinematic composition, monochromatic shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9X_J9_OsAhr3BsdvbHVhnVIIbf5vQy8kTk1m29koLjBlegDe6JUjyDEHl99kiKRVsPfZkpZduO7gF_Jr2lKr5Mpz5Qg7CHAwRZmN_d39mnS2PizcrynBvy26yq4FWG3TZVaQOQf3mx-qfBT6dMyY-SunoeSPjBVR2fGW3M5RZnnVMf6ibiQbqDB-0l2dKVHunh6CRizJLVQa1BBk1RUQzir_DHMPCFCoHKiyv9HCXaxHktVJ0B3A3lt1uJw6NOPm-UsFIn2MSTFEb"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-background/90 to-background/50 mix-blend-multiply"></div>
+</div>
+<!-- Login Card Surface -->
+<main class="relative z-10 w-full max-w-[440px] bg-surface-container-low border border-surface-variant p-lg rounded-lg shadow-2xl mt-16">
+<!-- Header -->
+<header class="flex flex-col items-center mb-xl">
+<img alt="Urban Groom Logo" class="h-24 w-24 object-cover rounded-full mb-margin shadow-lg" src="https://lh3.googleusercontent.com/aida/ADBb0uj1gbtd99hA2ddzNOlgchS0-8vjVSYNKe6aFeGuYkzL0kvwUP0onifhE8RBviXvIYedSpHyUtB93ffYag39kJahSU3aycfNERJSP_YWqtW2TpFDQVdNwyJ9ScOQd31dF1CjwIVjFhJ7SFZsBE8Vq-UET2L2Nj3_HzNv5jjO6jkoOeaoLc6Vz5lVcxv_HqLIDyheOBi4mUizC4Kt2esy8Mgc4lqo3Lcp_kxuWZDv472Y5Mq7IHMq6GGfHV9Fj4YhN2yEjKpKkZWong"/>
+<h1 class="font-headline-md text-headline-md text-on-surface uppercase tracking-widest text-center">Acceso a mi cuenta</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-sm text-center">Ingresa tus credenciales para continuar al portal de reservas.</p>
+</header>
+<!-- Form -->
+<form action="#" class="flex flex-col w-full" method="POST">
+<!-- Email Input Group -->
+<div class="flex flex-col gap-xs mb-gutter">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase" for="email">Correo Electrónico</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-sm text-outline-variant" style="font-variation-settings: 'FILL' 0;">mail</span>
+<input autocomplete="email" class="w-full h-14 pl-[48px] pr-sm bg-surface-container text-on-surface font-body-md text-body-md border-b-2 border-outline-variant focus:border-primary focus:outline-none transition-colors duration-200 placeholder:text-on-surface-variant/40 rounded-t-lg" id="email" name="email" placeholder="cliente@ejemplo.com" required="" type="email"/>
+</div>
+</div>
+<!-- Password Input Group -->
+<div class="flex flex-col gap-xs mb-md">
+<div class="flex justify-between items-end">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase" for="password">Contraseña</label>
+<a class="font-label-md text-label-md text-primary hover:text-on-surface transition-colors duration-200" href="#">¿Olvidaste?</a>
+</div>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-sm text-outline-variant" style="font-variation-settings: 'FILL' 0;">lock</span>
+<input autocomplete="current-password" class="w-full h-14 pl-[48px] pr-sm bg-surface-container text-on-surface font-body-md text-body-md border-b-2 border-outline-variant focus:border-primary focus:outline-none transition-colors duration-200 placeholder:text-on-surface-variant/40 rounded-t-lg" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+</div>
+</div>
+<!-- Submit Button -->
+<button class="w-full h-14 mt-margin bg-primary text-on-primary font-label-md text-label-md uppercase tracking-widest rounded-lg hover:bg-tertiary-fixed transition-colors duration-200 flex items-center justify-center gap-sm group" type="submit">
+<span>Iniciar Sesión</span>
+<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform" style="font-variation-settings: 'FILL' 1;">arrow_forward</span>
+</button>
+</form>
+<!-- Divider -->
+<div class="w-full h-[1px] bg-surface-variant my-lg relative flex justify-center items-center">
+<span class="absolute bg-surface-container-low px-sm font-label-md text-label-md text-outline uppercase tracking-widest">O</span>
+</div>
+<!-- Sign Up Prompt -->
+<div class="text-center">
+<p class="font-body-md text-body-md text-on-surface-variant">
+                ¿Nuevo Cliente? 
+                <a class="inline-flex items-center gap-xs font-label-md text-label-md text-primary uppercase ml-xs border-b border-transparent hover:border-primary transition-all duration-200 pb-[2px]" href="#">
+                    Regístrate
+                    <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 0;">person_add</span>
+</a>
+</p>
+</div>
+</main>
+</body></html>
