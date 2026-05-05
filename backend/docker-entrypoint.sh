@@ -6,7 +6,8 @@ echo "=== Starting HDBarber Container ==="
 # Generar APP_KEY si no existe o es placeholder
 if [ -z "$APP_KEY" ] || [ "$APP_KEY" = "base64:placeholderkeymustbereplaced" ]; then
     echo "Generating APP_KEY..."
-    APP_KEY=$(php -r "echo 'base64:' . base64_encode(random_bytes(32));")
+    # Generar 32 bytes aleatorios y codificar en base64 (formato Laravel)
+    APP_KEY="base64:$(openssl rand -base64 32)"
     echo "APP_KEY generated"
 fi
 
