@@ -58,54 +58,74 @@ function eur(c: number) { return (c / 100).toLocaleString('es-ES', { style: 'cur
 </script>
 
 <template>
-  <!-- ============== GUEST LANDING ============== -->
-  <div v-if="!auth.isAuthenticated" class="page py-margin">
-    <section class="text-center max-w-2xl mx-auto pb-12">
-      <span class="t-micro">PRECISION & TRADITION</span>
-      <h1 class="font-display text-display mt-3">
+  <!-- ============== GUEST LANDING - INDUSTRIAL MINIMALIST ============== -->
+  <div v-if="!auth.isAuthenticated" class="min-h-screen flex flex-col" style="background-color: #131315; color: #ffffff; font-family: 'Space Grotesk', sans-serif;">
+    <!-- Header -->
+    <header class="w-full border-b border-white/10 px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-8">
+        <div class="font-bold text-xl tracking-tighter">HDBARBER</div>
+        <nav class="hidden md:block">
+          <ul class="flex space-x-6 text-xs uppercase tracking-widest font-medium">
+            <li><RouterLink to="/" class="bg-white/10 px-3 py-1 rounded-sm hover:bg-white/20 transition-colors">Inicio</RouterLink></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="flex gap-4">
+        <RouterLink to="/login" class="text-xs uppercase tracking-widest font-semibold px-4 py-2 hover:text-gray-400 transition-colors">Entrar</RouterLink>
+        <RouterLink to="/register" class="text-xs uppercase tracking-widest font-semibold px-4 py-2 border border-white hover:bg-white hover:text-black transition-all">Crear Cuenta</RouterLink>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="relative flex flex-col items-center justify-center px-6 text-center py-20 flex-1">
+      <!-- Hero Label -->
+      <span class="text-[10px] md:text-xs uppercase tracking-[0.3em] text-white/50 mb-6 font-medium">
+        Precision & Tradition
+      </span>
+      <!-- Main Headline -->
+      <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6 max-w-4xl" style="text-wrap: balance;">
         HDBarber.<br/>
-        <span class="text-on-surface-variant">Tu estilo, dominado.</span>
+        Tu estilo, dominado.
       </h1>
-      <p class="t-muted mt-4 max-w-lg mx-auto">
+      <!-- Subtext -->
+      <p class="text-sm md:text-lg text-white/60 max-w-2xl mb-12 leading-relaxed">
         Reserva tu próximo corte. Pago online seguro, recordatorios automáticos y la precisión de los mejores barberos.
       </p>
-      <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-        <RouterLink to="/register" class="btn-primary">
-          Reservar cita <ArrowRight class="w-4 h-4" />
+      <!-- Call to Actions -->
+      <div class="flex flex-col sm:flex-row gap-4 items-center justify-center w-full">
+        <!-- Primary Action -->
+        <RouterLink to="/register" class="group relative inline-flex items-center justify-center px-8 py-4 text-sm font-bold uppercase tracking-widest bg-white text-black hover:bg-gray-200 transition-all w-full sm:w-auto">
+          Reservar Cita
+          <svg class="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+          </svg>
         </RouterLink>
-        <RouterLink to="/login" class="btn-secondary">Ya tengo cuenta</RouterLink>
+        <!-- Secondary Action -->
+        <RouterLink to="/login" class="inline-flex items-center justify-center px-8 py-4 text-sm font-bold uppercase tracking-widest border border-white/20 text-white hover:bg-white/5 transition-all w-full sm:w-auto">
+          Ya tengo cuenta
+        </RouterLink>
       </div>
-    </section>
+      <!-- Decorative Industrial Element -->
+      <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-px h-12 bg-gradient-to-b from-white/0 to-white/20 mt-12"></div>
+    </main>
 
-    <section class="grid md:grid-cols-3 gap-gutter mb-margin">
-      <div class="card-sm">
-        <Scissors class="w-5 h-5 text-primary mb-3" />
-        <div class="t-label mb-1">Profesionales top</div>
-        <p class="t-muted text-sm">Estilistas con años de experiencia y formación continua.</p>
+    <!-- Services Section (Preserved) -->
+    <section class="px-6 py-16 border-t border-white/5">
+      <h2 class="text-center text-xs uppercase tracking-[0.2em] text-white/40 mb-10 font-medium">Nuestros Servicios</h2>
+      <div v-if="services.loading" class="text-center text-white/40 text-sm">Cargando…</div>
+      <div v-else-if="services.error" class="max-w-md mx-auto p-4 border border-red-500/30 bg-red-500/10 rounded">
+        <p class="text-red-400 text-sm">{{ services.error }}</p>
       </div>
-      <div class="card-sm">
-        <Calendar class="w-5 h-5 text-primary mb-3" />
-        <div class="t-label mb-1">Reserva 24/7</div>
-        <p class="t-muted text-sm">Elige servicio, día y hora desde cualquier dispositivo.</p>
-      </div>
-      <div class="card-sm">
-        <ShieldCheck class="w-5 h-5 text-primary mb-3" />
-        <div class="t-label mb-1">Pago seguro</div>
-        <p class="t-muted text-sm">Procesado por Stripe con cifrado SSL extremo a extremo.</p>
-      </div>
-    </section>
-
-    <section>
-      <h2 class="section-title">Nuestros servicios</h2>
-      <div v-if="services.loading" class="t-muted">Cargando…</div>
-      <div v-else-if="services.error" class="card border-error bg-error-container">
-        <p class="text-on-error-container">{{ services.error }}</p>
-      </div>
-      <div v-else-if="services.items.length === 0" class="t-muted">No hay servicios disponibles.</div>
-      <div v-else class="grid sm:grid-cols-2 lg:grid-cols-3 gap-gutter">
+      <div v-else-if="services.items.length === 0" class="text-center text-white/40 text-sm">No hay servicios disponibles.</div>
+      <div v-else class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
         <ServiceCard v-for="s in services.items" :key="s.id" :service="s" @select="selectService(s.id)" />
       </div>
     </section>
+
+    <!-- Footer -->
+    <footer class="w-full py-4 border-t border-white/5 text-center" style="background-color: #0e0e10;">
+      <p class="text-[9px] uppercase tracking-[0.2em] text-white/30">© 2024 HDBARBER · PRECISION & TRADITION</p>
+    </footer>
   </div>
 
   <!-- ============== AUTH PANEL (CLIENT DASHBOARD) ============== -->

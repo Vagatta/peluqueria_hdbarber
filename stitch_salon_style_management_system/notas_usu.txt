@@ -1,2 +1,4 @@
 cliente@hdbarber.test
 Cliente12345
+admin@hdbarber.test
+Admin12345
