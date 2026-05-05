@@ -147,61 +147,9 @@ RUN chown -R www-data:www-data /var/www/html \
  && chmod -R 755 /var/www/html/storage \
  && chmod -R 755 /var/www/html/bootstrap/cache
 
-# Script de inicio que configura el entorno
-RUN { \
-    echo '#!/bin/sh'; \
-    echo ''; \
-    echo '# Crear .env de producción desde variables de entorno'; \
-    echo 'cat > /var/www/html/.env << EOF'; \
-    echo 'APP_NAME=HDBarber'; \
-    echo 'APP_ENV=production'; \
-    echo "APP_KEY=${APP_KEY:-base64:placeholderkeymustbereplaced}"; \
-    echo 'APP_DEBUG=false'; \
-    echo 'APP_URL=https://peluqueria-hdbarber.onrender.com'; \
-    echo 'APP_TIMEZONE=Europe/Madrid'; \
-    echo ''; \
-    echo 'LOG_CHANNEL=stderr'; \
-    echo 'LOG_LEVEL=info'; \
-    echo ''; \
-    echo 'DB_CONNECTION=mysql'; \
-    echo "DB_HOST=${DB_HOST:-}"; \
-    echo "DB_PORT=${DB_PORT:-3306}"; \
-    echo "DB_DATABASE=${DB_DATABASE:-}"; \
-    echo "DB_USERNAME=${DB_USERNAME:-}"; \
-    echo "DB_PASSWORD=${DB_PASSWORD:-}"; \
-    echo ''; \
-    echo 'BROADCAST_DRIVER=log'; \
-    echo 'CACHE_STORE=file'; \
-    echo 'FILESYSTEM_DISK=local'; \
-    echo 'QUEUE_CONNECTION=sync'; \
-    echo 'SESSION_DRIVER=cookie'; \
-    echo 'SESSION_LIFETIME=120'; \
-    echo 'SESSION_SECURE_COOKIE=true'; \
-    echo 'SESSION_HTTP_ONLY=true'; \
-    echo 'SESSION_SAME_SITE=lax'; \
-    echo ''; \
-    echo "SANCTUM_STATEFUL_DOMAINS=${SANCTUM_STATEFUL_DOMAINS:-*.onrender.com}"; \
-    echo "SPA_URL=${SPA_URL:-https://hdbarber.vercel.app}"; \
-    echo ''; \
-    echo "CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-*}"; \
-    echo ''; \
-    echo 'MAIL_MAILER=log'; \
-    echo ''; \
-    echo "STRIPE_KEY=${STRIPE_KEY:-}"; \
-    echo "STRIPE_SECRET=${STRIPE_SECRET:-}"; \
-    echo "STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET:-}"; \
-    echo 'STRIPE_CURRENCY=eur'; \
-    echo ''; \
-    echo 'THROTTLE_LOGIN_MAX=5'; \
-    echo 'THROTTLE_LOGIN_DECAY=1'; \
-    echo 'EOF'; \
-    echo ''; \
-    echo '# Ajustar permisos para www-data'; \
-    echo 'chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || true'; \
-    echo ''; \
-    echo '# Iniciar supervisord'; \
-    echo 'exec supervisord -c /etc/supervisord.conf'; \
-} > /start.sh && chmod +x /start.sh
+# Copiar entrypoint
+COPY docker-entrypoint.sh /start.sh
+RUN chmod +x /start.sh
 
 # Puerto que Render espera
 EXPOSE 10000
