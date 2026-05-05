@@ -1,17 +1,26 @@
 #!/bin/sh
 set -e
 
+echo "=== Starting HDBarber Container ==="
+
+# Generar APP_KEY si no existe o es placeholder
+if [ -z "$APP_KEY" ] || [ "$APP_KEY" = "base64:placeholderkeymustbereplaced" ]; then
+    echo "Generating APP_KEY..."
+    APP_KEY=$(php -r "echo 'base64:' . base64_encode(random_bytes(32));")
+    echo "APP_KEY generated"
+fi
+
 # Crear .env desde variables de entorno de Render
 cat > /var/www/html/.env << EOF
 APP_NAME=HDBarber
 APP_ENV=production
-APP_KEY=${APP_KEY:-base64:placeholderkeymustbereplaced}
-APP_DEBUG=false
+APP_KEY=${APP_KEY}
+APP_DEBUG=${APP_DEBUG:-false}
 APP_URL=${APP_URL:-https://peluqueria-hdbarber.onrender.com}
 APP_TIMEZONE=Europe/Madrid
 
 LOG_CHANNEL=stderr
-LOG_LEVEL=info
+LOG_LEVEL=debug
 
 DB_CONNECTION=mysql
 DB_HOST=${DB_HOST:-}
@@ -46,8 +55,26 @@ THROTTLE_LOGIN_MAX=5
 THROTTLE_LOGIN_DECAY=1
 EOF
 
+echo ".env created"
+
+# Crear directorios si no existen
+mkdir -p /var/www/html/storage/logs
+mkdir -p /var/www/html/storage/framework/cache/data
+mkdir -p /var/www/html/storage/framework/sessions
+mkdir -p /var/www/html/storage/framework/views
+mkdir -p /var/www/html/bootstrap/cache
+
 # Ajustar permisos
-chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || true
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+
+echo "Permissions set"
+
+# Verificar que Laravel puede iniciar
+cd /var/www/html
+php artisan --version || echo "Warning: artisan failed"
+
+echo "=== Starting services ==="
 
 # Iniciar supervisord
 exec supervisord -c /etc/supervisord.conf
