@@ -71,9 +71,20 @@ chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 echo "Permissions set"
 
-# Verificar que Laravel puede iniciar
+# Ejecutar migraciones si hay base de datos configurada
 cd /var/www/html
-php artisan --version || echo "Warning: artisan failed"
+if [ -n "$DB_HOST" ]; then
+    echo "Running migrations..."
+    php artisan migrate --force --no-interaction 2>&1 || echo "Migration warning (DB may not be ready)"
+    
+    echo "Seeding services if empty..."
+    php artisan db:seed --class=ServiceSeeder --force --no-interaction 2>&1 || true
+fi
+
+# Cachear config y rutas para producción
+echo "Caching config..."
+php artisan config:cache --no-interaction 2>&1 || true
+php artisan route:cache --no-interaction 2>&1 || true
 
 echo "=== Starting services ==="
 
