@@ -47,14 +47,14 @@ RUN { \
     echo 'opcache.validate_timestamps=1'; \
 } > /usr/local/etc/php/conf.d/zz-app.ini
 
-# Configurar PHP-FPM para escuchar en socket
+# Configurar PHP-FPM para escuchar en TCP
 RUN { \
     echo '[global]'; \
     echo 'daemonize = no'; \
     echo ''; \
     echo '[www]'; \
-    echo 'listen = /var/run/php-fpm.sock'; \
-    echo 'listen.mode = 0666'; \
+    echo 'listen = 127.0.0.1:9000'; \
+    echo 'listen.allowed_clients = 127.0.0.1'; \
     echo 'user = www-data'; \
     echo 'group = www-data'; \
     echo 'pm = dynamic'; \
@@ -90,7 +90,7 @@ RUN { \
     echo '    location ~ \.php$ {'; \
     echo '        try_files $uri =404;'; \
     echo '        fastcgi_split_path_info ^(.+\.php)(/.+)$;'; \
-    echo '        fastcgi_pass unix:/var/run/php-fpm.sock;'; \
+    echo '        fastcgi_pass 127.0.0.1:9000;'; \
     echo '        fastcgi_index index.php;'; \
     echo '        include fastcgi_params;'; \
     echo '        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;'; \
@@ -139,8 +139,7 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 # Ajustar permisos
 RUN chown -R www-data:www-data /var/www/html \
  && chmod -R 755 /var/www/html/storage \
- && chmod -R 755 /var/www/html/bootstrap/cache \
- && mkdir -p /var/run && touch /var/run/php-fpm.sock
+ && chmod -R 755 /var/www/html/bootstrap/cache
 
 # Puerto que Render espera
 EXPOSE 10000
