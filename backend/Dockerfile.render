@@ -1,0 +1,142 @@
+# Dockerfile para Render - Nginx + PHP-FPM en un solo contenedor
+FROM php:8.2-fpm-alpine
+
+# Instalar nginx y dependencias
+RUN apk add --no-cache \
+    nginx \
+    bash \
+    git \
+    curl \
+    icu-dev \
+    libzip-dev \
+    zip \
+    unzip \
+    oniguruma-dev \
+    libpng-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
+    autoconf \
+    g++ \
+    make \
+    linux-headers \
+    supervisor
+
+# PHP extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+ && docker-php-ext-install -j$(nproc) \
+        pdo_mysql \
+        mbstring \
+        bcmath \
+        intl \
+        zip \
+        gd \
+        opcache \
+        pcntl
+
+# Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# Configuración PHP
+RUN { \
+    echo 'memory_limit=512M'; \
+    echo 'upload_max_filesize=20M'; \
+    echo 'post_max_size=20M'; \
+    echo 'max_execution_time=120'; \
+    echo 'date.timezone=Europe/Madrid'; \
+    echo 'opcache.enable=1'; \
+    echo 'opcache.validate_timestamps=1'; \
+} > /usr/local/etc/php/conf.d/zz-app.ini
+
+# Configurar PHP-FPM para escuchar en socket
+RUN { \
+    echo '[global]'; \
+    echo 'daemonize = no'; \
+    echo ''; \
+    echo '[www]'; \
+    echo 'listen = /var/run/php-fpm.sock'; \
+    echo 'listen.mode = 0666'; \
+    echo 'user = www-data'; \
+    echo 'group = www-data'; \
+} > /usr/local/etc/php-fpm.d/www.conf
+
+# Crear usuario www-data
+RUN adduser -S www-data -G www-data || true
+
+# Configuración de nginx para Render
+RUN { \
+    echo 'server {'; \
+    echo '    listen 10000;'; \
+    echo '    server_name _;'; \
+    echo '    root /var/www/html/public;'; \
+    echo '    index index.php index.html;'; \
+    echo ''; \
+    echo '    client_max_body_size 20M;'; \
+    echo ''; \
+    echo '    add_header X-Frame-Options "SAMEORIGIN" always;'; \
+    echo '    add_header X-Content-Type-Options "nosniff" always;'; \
+    echo '    add_header Referrer-Policy "strict-origin-when-cross-origin" always;'; \
+    echo ''; \
+    echo '    location / {'; \
+    echo '        try_files $uri $uri/ /index.php?$query_string;'; \
+    echo '    }'; \
+    echo ''; \
+    echo '    location ~ \.php$ {'; \
+    echo '        try_files $uri =404;'; \
+    echo '        fastcgi_split_path_info ^(.+\.php)(/.+)$;'; \
+    echo '        fastcgi_pass unix:/var/run/php-fpm.sock;'; \
+    echo '        fastcgi_index index.php;'; \
+    echo '        include fastcgi_params;'; \
+    echo '        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;'; \
+    echo '        fastcgi_param PATH_INFO $fastcgi_path_info;'; \
+    echo '        fastcgi_read_timeout 120s;'; \
+    echo '    }'; \
+    echo ''; \
+    echo '    location ~ /\.(?!well-known).* {'; \
+    echo '        deny all;'; \
+    echo '    }'; \
+    echo '}'; \
+} > /etc/nginx/http.d/default.conf
+
+# Configuración de supervisord para ejecutar nginx y php-fpm
+RUN { \
+    echo '[supervisord]'; \
+    echo 'nodaemon=true'; \
+    echo 'logfile=/dev/null'; \
+    echo 'pidfile=/var/run/supervisord.pid'; \
+    echo ''; \
+    echo '[program:php-fpm]'; \
+    echo 'command=php-fpm'; \
+    echo 'stdout_logfile=/dev/stdout'; \
+    echo 'stdout_logfile_maxbytes=0'; \
+    echo 'stderr_logfile=/dev/stderr'; \
+    echo 'stderr_logfile_maxbytes=0'; \
+    echo 'autorestart=true'; \
+    echo ''; \
+    echo '[program:nginx]'; \
+    echo 'command=nginx -g "daemon off;"'; \
+    echo 'stdout_logfile=/dev/stdout'; \
+    echo 'stdout_logfile_maxbytes=0'; \
+    echo 'stderr_logfile=/dev/stderr'; \
+    echo 'stderr_logfile_maxbytes=0'; \
+    echo 'autorestart=true'; \
+} > /etc/supervisord.conf
+
+WORKDIR /var/www/html
+
+# Copiar código del backend
+COPY --chown=www-data:www-data . /var/www/html/
+
+# Instalar dependencias
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+# Ajustar permisos
+RUN chown -R www-data:www-data /var/www/html \
+ && chmod -R 755 /var/www/html/storage \
+ && chmod -R 755 /var/www/html/bootstrap/cache \
+ && mkdir -p /var/run && touch /var/run/php-fpm.sock
+
+# Puerto que Render espera
+EXPOSE 10000
+
+# Comando de inicio
+CMD ["supervisord", "-c", "/etc/supervisord.conf"]
