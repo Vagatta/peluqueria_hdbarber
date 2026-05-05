@@ -40,10 +40,10 @@ SESSION_SECURE_COOKIE=true
 SESSION_HTTP_ONLY=true
 SESSION_SAME_SITE=lax
 
-SANCTUM_STATEFUL_DOMAINS=${SANCTUM_STATEFUL_DOMAINS:-*.onrender.com}
+SANCTUM_STATEFUL_DOMAINS=${SANCTUM_STATEFUL_DOMAINS:-peluqueria-hdbarber.vercel.app,*.vercel.app,peluqueria-hdbarber.onrender.com}
 SPA_URL=${SPA_URL:-https://hdbarber.vercel.app}
 
-CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-*}
+CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-https://peluqueria-hdbarber.vercel.app,https://*.vercel.app}
 
 MAIL_MAILER=log
 
