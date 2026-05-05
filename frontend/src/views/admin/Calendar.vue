@@ -3,7 +3,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useAppointmentsStore } from '@/stores/appointments'
 import { useServicesStore } from '@/stores/services'
 import { api } from '@/api/client'
-import type { Appointment, Employee } from '@/types'
+import type { Service, Slot, Appointment, PaymentStatusAppt, Employee, Client } from '@/types'
 import DatePicker from '@/components/DatePicker.vue'
 import { Plus, X, Check, Clock, User } from 'lucide-vue-next'
 
@@ -130,7 +130,7 @@ async function submitEdit() {
   try {
     await appts.adminUpdate(selected.value.id, {
       status: editForm.value.status as Appointment['status'],
-      payment_status: editForm.value.payment_status,
+      payment_status: editForm.value.payment_status as PaymentStatusAppt,
       employee_id: editForm.value.employee_id,
       start_at: localToIso(editForm.value.start_at),
       notes: editForm.value.notes || undefined,

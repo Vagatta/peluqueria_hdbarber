@@ -2,7 +2,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { api } from '@/api/client'
 import { useAppointmentsStore } from '@/stores/appointments'
-import type { DashboardStats, Appointment } from '@/types'
+import type { DashboardStats, Appointment, PaymentStatusAppt } from '@/types'
 import { Calendar, Bell, BadgeEuro, Users, Scissors, Plus, Check, X, CreditCard, CheckCheck, ArrowRight } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 
@@ -25,7 +25,7 @@ async function applyAction(a: Appointment, status?: string, paymentStatus?: stri
   try {
     await appts.adminUpdate(a.id, {
       ...(status ? { status: status as Appointment['status'] } : {}),
-      ...(paymentStatus ? { payment_status: paymentStatus } : {}),
+      ...(paymentStatus ? { payment_status: paymentStatus as PaymentStatusAppt } : {}),
     })
     await loadDashboard()
   } catch (e: any) {
