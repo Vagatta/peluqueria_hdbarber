@@ -8,6 +8,7 @@ const auth = useAuthStore()
 const route = useRoute()
 const router = useRouter()
 const isAdminArea = computed(() => route.path.startsWith('/admin'))
+const isGuestLanding = computed(() => route.path === '/' && !auth.isAuthenticated)
 const drawerOpen = ref(false)
 
 async function doLogout() {
@@ -30,8 +31,8 @@ const navItems = computed(() => {
 
 <template>
   <div class="min-h-screen flex flex-col">
-    <!-- Top App Bar -->
-    <header class="fixed top-0 inset-x-0 z-40 h-16 bg-[#121212] border-b border-surface-container-highest">
+    <!-- Top App Bar (hide on guest landing) -->
+    <header v-if="!isGuestLanding" class="fixed top-0 inset-x-0 z-40 h-16 bg-[#121212] border-b border-surface-container-highest">
       <div class="h-full max-w-[1280px] mx-auto px-4 md:px-margin flex items-center justify-between gap-4">
         <button
           class="md:hidden p-2 -ml-2 rounded text-on-surface hover:bg-surface-container-low transition-colors"
@@ -95,7 +96,7 @@ const navItems = computed(() => {
     </Transition>
 
     <!-- Main canvas -->
-    <main class="flex-1 pt-16 pb-24 md:pb-margin">
+    <main class="flex-1" :class="isGuestLanding ? '' : 'pt-16 pb-24 md:pb-margin'">
       <slot />
     </main>
 
@@ -113,8 +114,8 @@ const navItems = computed(() => {
       </div>
     </nav>
 
-    <!-- Footer (desktop only on guest pages) -->
-    <footer v-if="!auth.isAuthenticated" class="hidden md:block border-t border-surface-container-highest mt-margin">
+    <!-- Footer (desktop only on guest pages, hide on guest landing) -->
+    <footer v-if="!auth.isAuthenticated && !isGuestLanding" class="hidden md:block border-t border-surface-container-highest mt-margin">
       <div class="page py-6 text-center t-micro">
         © {{ new Date().getFullYear() }} HDBARBER · PRECISION & TRADITION
       </div>
