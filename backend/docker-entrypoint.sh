@@ -38,7 +38,7 @@ SESSION_DRIVER=cookie
 SESSION_LIFETIME=120
 SESSION_SECURE_COOKIE=true
 SESSION_HTTP_ONLY=true
-SESSION_SAME_SITE=lax
+SESSION_SAME_SITE=none
 
 SANCTUM_STATEFUL_DOMAINS=${SANCTUM_STATEFUL_DOMAINS:-peluqueria-hdbarber.vercel.app,*.vercel.app,peluqueria-hdbarber.onrender.com}
 SPA_URL=${SPA_URL:-https://hdbarber.vercel.app}
