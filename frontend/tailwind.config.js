@@ -39,6 +39,15 @@ export default {
         'error-container': '#93000a',
         'on-error-container': '#ffdad6',
         // Compat: keep "brand" as silver mapping so old refs don't blow up
+        // Luxury landing palette (coexists with legacy tokens)
+        ink: '#050505',
+        surfaceDark: '#111111',
+        surfaceLight: '#181818',
+        borderSoft: 'rgba(255,255,255,0.08)',
+        borderHair: 'rgba(255,255,255,0.06)',
+        primaryText: '#F1EEE8',
+        textSecondary: 'rgba(241,238,232,0.68)',
+        textMuted: 'rgba(255,255,255,0.38)',
         brand: {
           50: '#f5f5f5',
           100: '#e3e2e2',
@@ -53,8 +62,9 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['"Space Grotesk"', 'Inter', 'sans-serif']
+        sans: ['"Inter Tight"', 'Inter', 'system-ui', 'sans-serif'],
+        display: ['"Bebas Neue"', '"Space Grotesk"', 'Inter', 'sans-serif'],
+        tight: ['"Inter Tight"', 'Inter', 'system-ui', 'sans-serif']
       },
       fontSize: {
         'display': ['48px', { lineHeight: '1.1', letterSpacing: '-0.02em', fontWeight: '700' }],

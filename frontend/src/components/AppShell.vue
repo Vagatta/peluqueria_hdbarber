@@ -2,7 +2,7 @@
 import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { computed, ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
-import { Scissors, Calendar, User, LogOut, Home, Menu, X, ShieldCheck } from 'lucide-vue-next'
+import { Scissors, Calendar, User, LogOut, Home, Menu, X, ShieldCheck, ArrowRight } from 'lucide-vue-next'
 
 const auth = useAuthStore()
 const route = useRoute()
@@ -31,94 +31,135 @@ const navItems = computed(() => {
 
 <template>
   <div class="min-h-screen flex flex-col">
-    <!-- Top App Bar (hide on guest landing) -->
-    <header v-if="!isGuestLanding" class="fixed top-0 inset-x-0 z-40 h-16 bg-[#121212] border-b border-surface-container-highest">
-      <div class="h-full max-w-[1280px] mx-auto px-4 md:px-margin flex items-center justify-between gap-4">
-        <button
-          class="md:hidden p-2 -ml-2 rounded text-on-surface hover:bg-surface-container-low transition-colors"
-          @click="drawerOpen = !drawerOpen"
-          aria-label="Menú"
-        >
-          <Menu v-if="!drawerOpen" class="w-5 h-5" />
-          <X v-else class="w-5 h-5" />
-        </button>
 
-        <RouterLink to="/" class="flex items-center gap-2 mx-auto md:mx-0 font-display font-bold uppercase tracking-[0.18em] text-on-surface">
+    <!-- ========== HEADER (hidden on guest landing — landing has its own) ========== -->
+    <header
+      v-if="!isGuestLanding"
+      class="fixed top-0 inset-x-0 z-50 h-[72px] bg-ink/80 backdrop-blur-md border-b border-borderHair"
+    >
+      <div class="h-full max-w-[1440px] mx-auto px-6 md:px-10 flex items-center justify-between">
+
+        <!-- Logo -->
+        <RouterLink to="/" class="font-display text-2xl tracking-[0.24em] text-primaryText shrink-0">
           HDBARBER
         </RouterLink>
 
-        <nav class="hidden md:flex items-center gap-1 ml-8 flex-1">
+        <!-- Desktop nav -->
+        <nav class="hidden md:flex items-center gap-8 text-[11px] uppercase tracking-[0.24em] text-textSecondary">
           <RouterLink
             v-for="i in navItems" :key="i.to" :to="i.to"
-            class="px-3 py-2 rounded text-label uppercase tracking-[0.05em] text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors"
-            active-class="!text-on-surface !bg-surface-container"
+            class="hover:text-primaryText transition-colors duration-200"
+            active-class="!text-primaryText"
           >{{ i.label }}</RouterLink>
         </nav>
 
-        <div class="flex items-center gap-2">
+        <!-- Desktop actions -->
+        <div class="hidden md:flex items-center gap-6">
           <template v-if="auth.isAuthenticated">
-            <button class="hidden md:inline-flex btn-ghost !py-2 !px-3" @click="doLogout">
-              <LogOut class="w-4 h-4" /> Salir
-            </button>
-            <div class="w-9 h-9 rounded-full bg-surface-container-high border border-outline-variant grid place-items-center text-label uppercase text-on-surface">
+            <div class="w-8 h-8 border border-borderSoft grid place-items-center text-[11px] uppercase tracking-[0.1em] text-primaryText">
               {{ auth.user?.name?.charAt(0) || 'U' }}
             </div>
+            <button
+              class="text-[11px] uppercase tracking-[0.24em] text-textSecondary hover:text-primaryText transition-colors duration-200 flex items-center gap-2"
+              @click="doLogout"
+            >
+              <LogOut class="w-3.5 h-3.5" /> Salir
+            </button>
           </template>
           <template v-else>
-            <RouterLink to="/login" class="btn-secondary !py-2 !px-3 hidden sm:inline-flex">Entrar</RouterLink>
-            <RouterLink to="/register" class="btn-primary !py-2 !px-3">Crear cuenta</RouterLink>
+            <RouterLink to="/login" class="text-[11px] uppercase tracking-[0.24em] text-textSecondary hover:text-primaryText transition-colors duration-200">
+              Entrar
+            </RouterLink>
+            <RouterLink
+              to="/register"
+              class="inline-flex items-center gap-2 h-10 px-5 bg-primaryText text-black text-[11px] uppercase tracking-[0.18em] hover:bg-white transition-colors duration-200"
+            >
+              Reservar cita <ArrowRight class="w-3.5 h-3.5" />
+            </RouterLink>
           </template>
         </div>
+
+        <!-- Mobile menu toggle -->
+        <button
+          class="md:hidden p-2 -mr-2 text-primaryText"
+          @click="drawerOpen = !drawerOpen"
+          :aria-label="drawerOpen ? 'Cerrar' : 'Menú'"
+        >
+          <X v-if="drawerOpen" class="w-5 h-5" />
+          <Menu v-else class="w-5 h-5" />
+        </button>
       </div>
     </header>
 
-    <!-- Mobile drawer -->
+    <!-- ========== MOBILE DRAWER ========== -->
     <Transition
       enter-from-class="opacity-0" enter-active-class="transition-opacity duration-150"
       leave-to-class="opacity-0" leave-active-class="transition-opacity duration-150"
     >
-      <div v-if="drawerOpen" class="fixed inset-0 z-30 md:hidden bg-black/60 backdrop-blur-sm" @click="drawerOpen = false">
-        <aside class="absolute top-16 inset-x-0 bg-[#121212] border-b border-surface-container-highest p-4 space-y-1" @click.stop>
+      <div
+        v-if="drawerOpen && !isGuestLanding"
+        class="fixed inset-0 z-40 md:hidden"
+        @click="drawerOpen = false"
+      >
+        <aside
+          class="absolute top-[72px] inset-x-0 bg-ink/95 backdrop-blur-xl border-b border-borderHair px-6 py-6 flex flex-col gap-4"
+          @click.stop
+        >
           <RouterLink
             v-for="i in navItems" :key="i.to" :to="i.to"
-            class="flex items-center gap-3 px-3 py-3 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low"
-            active-class="!text-on-surface !bg-surface-container"
+            class="py-2 text-[12px] uppercase tracking-[0.24em] text-textSecondary hover:text-primaryText transition-colors"
+            active-class="!text-primaryText"
             @click="drawerOpen = false"
-          >
-            <component :is="i.icon" class="w-4 h-4" />
-            <span class="text-label uppercase tracking-[0.05em]">{{ i.label }}</span>
-          </RouterLink>
-          <button v-if="auth.isAuthenticated" class="w-full mt-2 btn-ghost" @click="doLogout">
-            <LogOut class="w-4 h-4" /> Salir
-          </button>
+          >{{ i.label }}</RouterLink>
+
+          <div class="pt-4 mt-2 border-t border-borderHair flex gap-3">
+            <template v-if="auth.isAuthenticated">
+              <button class="flex-1 py-3 border border-borderSoft text-[11px] uppercase tracking-[0.18em] text-primaryText hover:bg-white/5 transition-colors" @click="doLogout">
+                <LogOut class="w-4 h-4 inline mr-2" />Salir
+              </button>
+            </template>
+            <template v-else>
+              <RouterLink to="/login" class="flex-1 py-3 text-center border border-borderSoft text-[11px] uppercase tracking-[0.18em] text-primaryText" @click="drawerOpen = false">
+                Entrar
+              </RouterLink>
+              <RouterLink to="/register" class="flex-1 py-3 text-center bg-primaryText text-black text-[11px] uppercase tracking-[0.18em]" @click="drawerOpen = false">
+                Reservar
+              </RouterLink>
+            </template>
+          </div>
         </aside>
       </div>
     </Transition>
 
-    <!-- Main canvas -->
-    <main class="flex-1" :class="isGuestLanding ? '' : 'pt-16 pb-24 md:pb-margin'">
+    <!-- ========== MAIN ========== -->
+    <main class="flex-1" :class="isGuestLanding ? '' : 'pt-[72px] pb-24 md:pb-10'">
       <slot />
     </main>
 
-    <!-- Mobile bottom nav (hide in admin) -->
-    <nav v-if="!isAdminArea && auth.isAuthenticated" class="md:hidden fixed bottom-0 inset-x-0 z-40 h-16 bg-[#121212] border-t border-surface-container-highest">
-      <div class="h-full grid grid-cols-4">
+    <!-- ========== MOBILE BOTTOM NAV (auth only, not admin) ========== -->
+    <nav
+      v-if="!isAdminArea && auth.isAuthenticated"
+      class="md:hidden fixed bottom-0 inset-x-0 z-40 h-16 bg-ink border-t border-borderHair"
+    >
+      <div class="h-full grid" :class="`grid-cols-${Math.min(navItems.length, 4)}`">
         <RouterLink
           v-for="i in navItems.slice(0, 4)" :key="i.to" :to="i.to"
-          class="flex flex-col items-center justify-center gap-1 text-on-surface-variant hover:text-on-surface border-t-2 border-transparent active:scale-95 transition-all"
-          active-class="!text-on-surface !border-primary"
+          class="flex flex-col items-center justify-center gap-1 text-textSecondary hover:text-primaryText transition-colors active:scale-95"
+          active-class="!text-primaryText"
         >
-          <component :is="i.icon" class="w-5 h-5" />
-          <span class="font-display text-[10px] uppercase tracking-tighter">{{ i.label }}</span>
+          <component :is="i.icon" class="w-5 h-5" stroke-width="1.5" />
+          <span class="font-display text-[9px] uppercase tracking-[0.15em]">{{ i.label }}</span>
         </RouterLink>
       </div>
     </nav>
 
-    <!-- Footer (desktop only on guest pages, hide on guest landing) -->
-    <footer v-if="!auth.isAuthenticated && !isGuestLanding" class="hidden md:block border-t border-surface-container-highest mt-margin">
-      <div class="page py-6 text-center t-micro">
-        © {{ new Date().getFullYear() }} HDBARBER · PRECISION & TRADITION
+    <!-- ========== FOOTER (non-auth, non-landing) ========== -->
+    <footer v-if="!auth.isAuthenticated && !isGuestLanding" class="hidden md:block border-t border-borderHair">
+      <div class="max-w-[1440px] mx-auto px-6 md:px-10 py-6 flex items-center justify-between text-[10px] uppercase tracking-[0.3em] text-textMuted">
+        <span>© {{ new Date().getFullYear() }} HDBARBER</span>
+        <span>Precision &nbsp;·&nbsp; Tradition</span>
       </div>
     </footer>
+
   </div>
 </template>

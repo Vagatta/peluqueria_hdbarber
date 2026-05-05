@@ -47,33 +47,33 @@ function shift(n: number) {
 </script>
 
 <template>
-  <div class="card h-full flex flex-col">
-    <div class="flex items-center justify-between mb-4">
-      <button class="p-2 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" @click="shift(-1)" aria-label="Mes anterior">
+  <div class="card h-full flex flex-col !bg-[#0d0d0d] !border-white/15">
+    <div class="flex items-center justify-between mb-6">
+      <button class="p-2 text-textSecondary hover:text-primaryText hover:bg-white/5 transition-colors" @click="shift(-1)" aria-label="Mes anterior">
         <ChevronLeft class="w-4 h-4" />
       </button>
-      <span class="font-display text-h2 capitalize text-on-surface">{{ monthLabel }}</span>
-      <button class="p-2 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" @click="shift(1)" aria-label="Mes siguiente">
+      <span class="font-display text-4xl md:text-5xl capitalize tracking-wide text-primaryText">{{ monthLabel }}</span>
+      <button class="p-2 text-textSecondary hover:text-primaryText hover:bg-white/5 transition-colors" @click="shift(1)" aria-label="Mes siguiente">
         <ChevronRight class="w-4 h-4" />
       </button>
     </div>
-    <div class="grid grid-cols-7 text-center mb-2">
-      <span v-for="d in ['L','M','X','J','V','S','D']" :key="d" class="t-micro py-1">{{ d }}</span>
+    <div class="grid grid-cols-7 text-center mb-3">
+      <span v-for="d in ['L','M','X','J','V','S','D']" :key="d" class="text-[11px] uppercase tracking-[0.2em] text-textSecondary py-1">{{ d }}</span>
     </div>
-    <div class="grid grid-cols-7 gap-1 flex-1">
+    <div class="grid grid-cols-7 gap-2 flex-1">
       <button
         v-for="d in days" :key="d.toISOString()"
         @click="pick(d)"
         :disabled="isPast(d)"
-        class="aspect-square rounded text-sm transition-colors"
+        class="aspect-square text-base md:text-lg transition-all border"
         :class="[
           isSelected(d)
-            ? 'bg-primary text-black font-semibold shadow-edge'
+            ? 'bg-primaryText text-black font-semibold border-primaryText shadow-[0_0_0_1px_rgba(255,255,255,0.35)]'
             : [
-                isSameMonth(d) ? 'text-on-surface' : 'text-on-surface-variant/40',
-                'hover:bg-surface-container-high border border-transparent hover:border-outline-variant'
+                isSameMonth(d) ? 'text-primaryText' : 'text-textMuted',
+                'bg-transparent border-transparent hover:bg-white/5 hover:border-white/15'
               ],
-          isPast(d) ? 'opacity-25 cursor-not-allowed hover:bg-transparent hover:border-transparent' : ''
+          isPast(d) ? '!text-white/18 cursor-not-allowed hover:bg-transparent hover:border-transparent' : ''
         ]"
       >{{ d.getDate() }}</button>
     </div>
