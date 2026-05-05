@@ -77,8 +77,8 @@ if [ -n "$DB_HOST" ]; then
     echo "Running migrations..."
     php artisan migrate --force --no-interaction 2>&1 || echo "Migration warning (DB may not be ready)"
     
-    echo "Seeding services if empty..."
-    php artisan db:seed --class=ServiceSeeder --force --no-interaction 2>&1 || true
+    echo "Seeding database..."
+    php artisan db:seed --force --no-interaction 2>&1 || true
 fi
 
 # Cachear config y rutas para producción
