@@ -53,8 +53,8 @@ RUN { \
     echo 'daemonize = no'; \
     echo ''; \
     echo '[www]'; \
-    echo 'listen = 127.0.0.1:9000'; \
-    echo 'listen.allowed_clients = 127.0.0.1'; \
+    echo 'listen = 9000'; \
+    echo 'listen.allowed_clients = 127.0.0.1,::1'; \
     echo 'user = www-data'; \
     echo 'group = www-data'; \
     echo 'pm = dynamic'; \
@@ -96,6 +96,12 @@ RUN { \
     echo '        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;'; \
     echo '        fastcgi_param PATH_INFO $fastcgi_path_info;'; \
     echo '        fastcgi_read_timeout 120s;'; \
+    echo '    }'; \
+    echo ''; \
+    echo '    location ~ ^/fpm-ping$ {'; \
+    echo '        access_log off;'; \
+    echo '        return 200 "pong\\n";'; \
+    echo '        add_header Content-Type text/plain;'; \
     echo '    }'; \
     echo ''; \
     echo '    location ~ /\.(?!well-known).* {'; \
