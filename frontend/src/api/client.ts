@@ -1,5 +1,12 @@
 import axios from 'axios'
 
+// Extender AxiosRequestConfig para incluir _csrfRetry
+declare module 'axios' {
+  export interface AxiosRequestConfig {
+    _csrfRetry?: boolean
+  }
+}
+
 // En desarrollo, usar el proxy de Vite para evitar problemas CORS
 const isDev = import.meta.env.DEV
 const baseURL = isDev ? '' : (import.meta.env.VITE_API_URL || 'http://localhost:8000')
@@ -9,7 +16,7 @@ export const api = axios.create({
   withCredentials: true,
   withXSRFToken: true,
   headers: { Accept: 'application/json' },
-  timeout: 10000 // 10 segundos timeout
+  timeout: 30000 // 30 segundos timeout
 })
 
 let csrfPromise: Promise<void> | null = null
@@ -21,9 +28,13 @@ export async function ensureCsrf() {
 
   csrfPromise = axios.get(`${baseURL}/sanctum/csrf-cookie`, {
     withCredentials: true,
-    timeout: 5000
+    timeout: 10000
   }).then(() => {
     csrfReady = true
+    console.log('[CSRF] Cookie obtained successfully')
+  }).catch((err) => {
+    console.error('[CSRF] Failed to obtain cookie:', err.message)
+    throw err
   }).finally(() => {
     csrfPromise = null
   })
@@ -41,7 +52,7 @@ api.interceptors.request.use(async (config) => {
 
 api.interceptors.response.use(
   (r) => r,
-  (err) => {
+  async (err) => {
     // Manejo de errores de red
     if (!err.response) {
       console.error('Network Error:', err.message)
@@ -54,7 +65,16 @@ api.interceptors.response.use(
 
     if (err?.response?.status === 419) {
       // CSRF token mismatch - reset y reintentar una vez
+      console.log('[CSRF] Token mismatch, retrying...')
       csrfReady = false
+      
+      // Reintentar la petición original una vez
+      const originalConfig = err.config
+      if (originalConfig && !originalConfig._csrfRetry) {
+        originalConfig._csrfRetry = true
+        await ensureCsrf()
+        return api(originalConfig)
+      }
     }
 
     if (err?.response?.status === 401) {
