@@ -3,7 +3,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useAppointmentsStore } from '@/stores/appointments'
 import { useServicesStore } from '@/stores/services'
 import { api } from '@/api/client'
-import type { Service, Slot, Appointment, PaymentStatusAppt, Employee, Client } from '@/types'
+import type { Service, Slot, Appointment, PaymentStatusAppt, Employee } from '@/types'
 import DatePicker from '@/components/DatePicker.vue'
 import { Plus, X, Check, Clock, User } from 'lucide-vue-next'
 
