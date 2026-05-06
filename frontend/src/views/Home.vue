@@ -24,7 +24,7 @@ function selectService(id: number) {
   if (auth.isAuthenticated) {
     router.push({ path: '/book', query: { service: id } })
   } else {
-    router.push({ path: '/login', query: { redirect: '/book', service: id } })
+    router.push({ path: '/register', query: { redirect: '/book', service: id } })
   }
 }
 
