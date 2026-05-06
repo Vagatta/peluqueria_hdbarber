@@ -23,6 +23,11 @@ return Application::configure(basePath: dirname(__DIR__))
         
         // Debug cookies for CSRF troubleshooting
         $middleware->append(\App\Http\Middleware\DebugCookies::class);
+        
+        // Excluir rutas de auth de CSRF para cross-origin (Vercel -> Render)
+        $middleware->validateCsrfTokens(
+            except: ['api/auth/register', 'api/auth/login']
+        );
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->shouldRenderJsonWhen(function (Request $request) {

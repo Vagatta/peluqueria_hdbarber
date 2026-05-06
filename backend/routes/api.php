@@ -17,20 +17,11 @@ Route::get('/services', [ServiceController::class, 'index']);
 Route::get('/services/{service}', [ServiceController::class, 'show']);
 Route::get('/availability', [AppointmentController::class, 'availability']);
 
-// Auth (sin CSRF para cross-origin - usamos stateless tokens)
-Route::post('/auth/register', [AuthController::class, 'register'])
-    ->middleware(['throttle:login'])
-    ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
-    
-Route::post('/auth/login', [AuthController::class, 'login'])
-    ->middleware(['throttle:login'])
-    ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
-    
-Route::post('/auth/forgot-password', [AuthController::class, 'forgotPassword'])
-    ->middleware('throttle:login');
-    
-Route::post('/auth/reset-password', [AuthController::class, 'resetPassword'])
-    ->middleware('throttle:login');
+// Auth (CSRF excluido en bootstrap/app.php para cross-origin)
+Route::post('/auth/register', [AuthController::class, 'register'])->middleware('throttle:login');
+Route::post('/auth/login', [AuthController::class, 'login'])->middleware('throttle:login');
+Route::post('/auth/forgot-password', [AuthController::class, 'forgotPassword'])->middleware('throttle:login');
+Route::post('/auth/reset-password', [AuthController::class, 'resetPassword'])->middleware('throttle:login');
 
 // Authenticated (Sanctum SPA via cookies)
 Route::middleware('auth:sanctum')->group(function () {
