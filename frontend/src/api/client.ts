@@ -22,6 +22,11 @@ export const api = axios.create({
 let csrfPromise: Promise<void> | null = null
 let csrfReady = false
 
+function getCookie(name: string): string | null {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'))
+  return match ? decodeURIComponent(match[2]) : null
+}
+
 export async function ensureCsrf() {
   if (csrfReady) return
   if (csrfPromise) return csrfPromise
@@ -47,6 +52,17 @@ api.interceptors.request.use(async (config) => {
   if (['post', 'put', 'patch', 'delete'].includes(method)) {
     await ensureCsrf()
   }
+  
+  // Debug: log cookies y headers
+  if (method !== 'get') {
+    const xsrfCookie = getCookie('XSRF-TOKEN')
+    console.log(`[API ${method.toUpperCase()}] ${config.url}`, {
+      xsrfCookie: xsrfCookie ? xsrfCookie.substring(0, 20) + '...' : 'NOT FOUND',
+      xsrfHeader: config.headers?.['X-XSRF-TOKEN'] ? 'SET' : 'NOT SET',
+      withCredentials: config.withCredentials
+    })
+  }
+  
   return config
 })
 
