@@ -29,10 +29,13 @@ class AuthController extends Controller
             'role' => User::ROLE_CLIENT,
         ]);
 
-        Auth::login($user);
-        $request->session()->regenerate();
+        // Crear token Sanctum para autenticación stateless (cross-origin)
+        $token = $user->createToken('api')->plainTextToken;
 
-        return response()->json(['user' => $user], 201);
+        return response()->json([
+            'user' => $user,
+            'token' => $token
+        ], 201);
     }
 
     public function login(Request $request): JsonResponse
@@ -46,16 +49,23 @@ class AuthController extends Controller
             return response()->json(['message' => 'Credenciales inválidas'], 422);
         }
 
-        $request->session()->regenerate();
-        return response()->json(['user' => $request->user()]);
+        // Crear token Sanctum para autenticación stateless (cross-origin)
+        $user = $request->user();
+        $token = $user->createToken('api')->plainTextToken;
+        
+        return response()->json([
+            'user' => $user,
+            'token' => $token
+        ]);
     }
 
     public function logout(Request $request): JsonResponse
     {
-        Auth::guard('web')->logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
+        // Borrar tokens del usuario (stateless auth)
+        if ($request->user()) {
+            $request->user()->tokens()->delete();
+        }
+        
         return response()->json(['message' => 'ok']);
     }
 

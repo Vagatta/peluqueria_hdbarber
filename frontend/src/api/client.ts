@@ -11,6 +11,30 @@ declare module 'axios' {
 const isDev = import.meta.env.DEV
 const baseURL = isDev ? '' : (import.meta.env.VITE_API_URL || 'http://localhost:8000')
 
+// Token-based auth para cross-origin (Vercel -> Render)
+let authToken: string | null = localStorage.getItem('auth_token')
+
+export function setAuthToken(token: string | null) {
+  authToken = token
+  if (token) {
+    localStorage.setItem('auth_token', token)
+  } else {
+    localStorage.removeItem('auth_token')
+  }
+}
+
+export function getAuthToken(): string | null {
+  return authToken
+}
+
+export function clearAuthToken() {
+  authToken = null
+  localStorage.removeItem('auth_token')
+}
+
+// Verificar si usamos token auth (cross-origin) o cookie auth (same-origin)
+const useTokenAuth = !isDev || (typeof window !== 'undefined' && window.location.hostname !== 'localhost')
+
 export const api = axios.create({
   baseURL,
   withCredentials: true,
@@ -49,18 +73,15 @@ export async function ensureCsrf() {
 
 api.interceptors.request.use(async (config) => {
   const method = (config.method || 'get').toLowerCase()
-  if (['post', 'put', 'patch', 'delete'].includes(method)) {
-    await ensureCsrf()
-  }
   
-  // Debug: log cookies y headers
-  if (method !== 'get') {
-    const xsrfCookie = getCookie('XSRF-TOKEN')
-    console.log(`[API ${method.toUpperCase()}] ${config.url}`, {
-      xsrfCookie: xsrfCookie ? xsrfCookie.substring(0, 20) + '...' : 'NOT FOUND',
-      xsrfHeader: config.headers?.['X-XSRF-TOKEN'] ? 'SET' : 'NOT SET',
-      withCredentials: config.withCredentials
-    })
+  // Si tenemos token, usarlo en lugar de CSRF
+  if (authToken) {
+    config.headers.Authorization = `Bearer ${authToken}`
+    // No necesitamos withCredentials para token auth
+    config.withCredentials = false
+  } else if (['post', 'put', 'patch', 'delete'].includes(method)) {
+    // Solo intentar CSRF si no tenemos token
+    await ensureCsrf()
   }
   
   return config
@@ -79,12 +100,11 @@ api.interceptors.response.use(
       }
     }
 
-    if (err?.response?.status === 419) {
-      // CSRF token mismatch - reset y reintentar una vez
+    if (err?.response?.status === 419 && !authToken) {
+      // CSRF token mismatch solo si no usamos token auth
       console.log('[CSRF] Token mismatch, retrying...')
       csrfReady = false
       
-      // Reintentar la petición original una vez
       const originalConfig = err.config
       if (originalConfig && !originalConfig._csrfRetry) {
         originalConfig._csrfRetry = true
@@ -94,7 +114,10 @@ api.interceptors.response.use(
     }
 
     if (err?.response?.status === 401) {
-      // optional: redirect to login handled by guards
+      // Limpiar token inválido
+      if (authToken) {
+        clearAuthToken()
+      }
     }
     return Promise.reject(err)
   }

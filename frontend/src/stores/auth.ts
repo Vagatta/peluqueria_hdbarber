@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { api } from '@/api/client'
+import { api, setAuthToken, clearAuthToken } from '@/api/client'
 import type { User } from '@/types'
 
 export const useAuthStore = defineStore('auth', () => {
@@ -20,6 +20,7 @@ export const useAuthStore = defineStore('auth', () => {
       const status = err?.response?.status
       if (status === 401) {
         console.log('ℹfetchMe: No session (401)')
+        clearAuthToken()
       } else {
         console.error('fetchMe error:', status, err?.message)
       }
@@ -34,6 +35,9 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       const { data } = await api.post('/api/auth/login', { email, password })
       user.value = data.user
+      if (data.token) {
+        setAuthToken(data.token)
+      }
     } finally {
       loading.value = false
     }
@@ -44,6 +48,9 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       const { data } = await api.post('/api/auth/register', payload)
       user.value = data.user
+      if (data.token) {
+        setAuthToken(data.token)
+      }
     } finally {
       loading.value = false
     }
@@ -51,6 +58,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function logout() {
     try { await api.post('/api/auth/logout') } catch {}
+    clearAuthToken()
     user.value = null
   }
 
