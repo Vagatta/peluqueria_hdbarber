@@ -24,7 +24,7 @@ function selectService(id: number) {
   if (auth.isAuthenticated) {
     router.push({ path: '/book', query: { service: id } })
   } else {
-    router.push({ path: '/register', query: { redirect: '/book', service: id } })
+    router.push({ path: '/login', query: { redirect: '/book', service: id } })
   }
 }
 
@@ -96,7 +96,7 @@ const luxServices = computed(() => {
 
 function onSelectLux(id: number) {
   if (id > 0) selectService(id)
-  else router.push(auth.isAuthenticated ? '/book' : '/register')
+  else router.push(auth.isAuthenticated ? '/book' : '/login')
 }
 
 // Reliable editorial gallery (uniform aspect; real URLs verified)
@@ -143,7 +143,7 @@ onMounted(() => {
         <div class="hidden md:flex items-center gap-6">
           <RouterLink to="/login" class="text-[11px] uppercase tracking-[0.24em] text-textSecondary hover:text-primaryText transition">Entrar</RouterLink>
           <RouterLink
-            to="/register"
+            to="/login"
             class="shine inline-flex items-center gap-2 h-10 px-5 bg-primaryText text-black text-[11px] uppercase tracking-[0.18em] hover:bg-white transition"
           >Reservar cita <ArrowRight class="w-3.5 h-3.5" /></RouterLink>
         </div>
@@ -167,7 +167,7 @@ onMounted(() => {
             <a href="#contacto"  @click="mobileNav=false" class="py-2 text-textSecondary hover:text-primaryText">Contacto</a>
             <div class="pt-4 mt-2 border-t border-borderHair flex gap-3">
               <RouterLink to="/login" class="flex-1 py-3 text-center border border-borderSoft text-primaryText">Entrar</RouterLink>
-              <RouterLink to="/register" class="flex-1 py-3 text-center bg-primaryText text-black">Reservar</RouterLink>
+              <RouterLink to="/login" class="flex-1 py-3 text-center bg-primaryText text-black">Reservar</RouterLink>
             </div>
           </div>
         </div>
@@ -220,7 +220,7 @@ onMounted(() => {
         </p>
         <div class="flex items-center gap-3 shrink-0">
           <RouterLink
-            to="/register"
+            to="/login"
             class="inline-flex items-center gap-2 h-12 px-7 bg-primaryText text-black text-[11px] uppercase tracking-[0.18em] font-medium hover:bg-white transition-colors duration-200"
           >
             Reservar cita <ArrowRight class="w-3.5 h-3.5" />
@@ -288,7 +288,7 @@ onMounted(() => {
             para ofrecer una experiencia impecable en cada cita.
           </p>
           <div class="reveal mt-10">
-            <LuxuryButton to="/register" variant="secondary">
+            <LuxuryButton to="/login" variant="secondary">
               Descubrir el estudio <ArrowRight class="w-4 h-4" />
             </LuxuryButton>
           </div>
@@ -410,7 +410,7 @@ onMounted(() => {
               Precisión, disciplina y tradición. Un estándar moderno para hombres exigentes.
             </p>
             <div class="mt-8">
-              <LuxuryButton to="/register" variant="primary">
+              <LuxuryButton to="/login" variant="primary">
                 Reservar cita <ArrowRight class="w-4 h-4" />
               </LuxuryButton>
             </div>

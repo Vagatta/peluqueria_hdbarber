@@ -43,7 +43,7 @@ router.beforeEach((to) => {
   // dejamos pasar y el guard se re-evaluará en la siguiente navegación
   if (!auth.initialized) return true
 
-  if (to.meta.auth && !auth.isAuthenticated) return { name: 'register', query: { redirect: to.fullPath } }
+  if (to.meta.auth && !auth.isAuthenticated) return { name: 'login', query: { redirect: to.fullPath } }
   if (to.meta.guestOnly && auth.isAuthenticated) return { name: 'home' }
   if (to.meta.admin && !auth.isAdmin) return { name: 'home' }
   return true
