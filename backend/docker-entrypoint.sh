@@ -39,7 +39,7 @@ SESSION_LIFETIME=120
 SESSION_SECURE_COOKIE=true
 SESSION_HTTP_ONLY=true
 SESSION_SAME_SITE=none
-SESSION_DOMAIN=.onrender.com
+SESSION_DOMAIN=null
 
 SANCTUM_STATEFUL_DOMAINS=${SANCTUM_STATEFUL_DOMAINS:-peluqueria-hdbarber.vercel.app,*.vercel.app,peluqueria-hdbarber.onrender.com}
 SPA_URL=${SPA_URL:-https://hdbarber.vercel.app}
